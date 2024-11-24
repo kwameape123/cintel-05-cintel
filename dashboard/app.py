@@ -28,17 +28,17 @@ from faicons import icon_svg
 
 # --------------------------------------------
 # First, set a constant UPDATE INTERVAL for all live data
-# Constants are usually defined in uppercase letters
+# Constants are defined in uppercase letters
 # Use a type hint to make it clear that it's an integer (: int)
 # --------------------------------------------
 
-UPDATE_INTERVAL_SECS: int = 20
+UPDATE_INTERVAL_SECS: int = 10
 
 # --------------------------------------------
-# Define a REACTIVE VALUE with a common data structure
-# The reactive value is used to store state (information)
+# Define REACTIVE VALUEs with a common data structure
+# The reactive values are used to hold or store live data. (information)
 # Used by all the display components that show this live data.
-# This reactive value is a wrapper around a DEQUE of readings
+# Reactive value is a wrapper around a DEQUE of readings
 # Reactive value keeps track of data stored in deque.
 # --------------------------------------------
 
@@ -52,7 +52,7 @@ reactive_value_wrapper_two = reactive.value(deque(maxlen=DEQUE_SIZE_TWO))
 # to get the latest data and display it.
 # The calculation is invalidated every UPDATE_INTERVAL_SECS
 # to trigger updates.
-# It returns a tuple with everything needed to display the data.
+# It returns a defined data structure with everything needed to display the data.
 # Very easy to expand or modify.
 # --------------------------------------------
 
@@ -112,14 +112,14 @@ def reactive_calc_generate():
         # Convert dataframe to dictionary
         new_random_rows_dict = new_random_rows.to_dict(orient='records')
         
-        # Get the deque and append the new entry
+        # Get the deque and append the new sample generated
         deque_snapshot = reactive_value_wrapper_two.get()  # Assuming this is a deque
         deque_snapshot.append(new_random_rows_dict)
         
-        # For Display: Convert deque to DataFrame for display
+        #  Deque is converted to DataFrame for display
         df = pd.DataFrame(deque_snapshot)
         
-        # Ensure proper data types and handle any errors
+        # Ensure we have the right data types and handle any errors
         df = df.assign(
             species = df['species'].astype(str),island = df['island'].astype(str),
             bill_length_mm = pd.to_numeric(df['bill_length_mm'], errors='coerce'),
@@ -130,10 +130,10 @@ def reactive_calc_generate():
         )
         
         
-        # For Display: Get the latest dictionary entry
+        # Get the latest dictionary entry
         latest_random_rows_dict = new_random_rows_dict
         
-        # Return a tuple with everything we need
+        # Return various data structure with everything we need
         return deque_snapshot, df, latest_random_rows_dict
         
     except Exception as e:
@@ -142,7 +142,7 @@ def reactive_calc_generate():
     
 
 
-# Define the Shiny UI Page layout
+# Define Web App user interface
 # Call the ui.page_opts() function
 # Set title to a string in quotes that will appear at the top
 # Set fillable to True to use the whole page width for the UI
@@ -167,7 +167,7 @@ with ui.sidebar(open="open"):
     )
     ui.a(
         "GitHub App",
-        href="",
+        href="https://kwameape123.github.io/cintel-05-cintel/",
         target="_blank",
     )
     ui.a("PyShiny", href="https://shiny.posit.co/py/", target="_blank")
@@ -178,6 +178,7 @@ with ui.sidebar(open="open"):
     )
 
 # In Shiny Express, everything not in the sidebar is in the main panel
+# Tabs was included in the user interface to organize output
 with ui.navset_pill(id="tab"): 
     with ui.nav_panel("Temperature"):
         with ui.layout_columns():
