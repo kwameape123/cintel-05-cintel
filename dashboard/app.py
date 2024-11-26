@@ -120,6 +120,7 @@ def reactive_calc_generate():
         df = pd.DataFrame(deque_snapshot)
         
         # Ensure we have the right data types and handle any errors
+        pd.DataFrame(list(deque)).astype(reference_df.dtypes.to_dict())
         df = df.assign(
             species = df['species'].astype(str),island = df['island'].astype(str),
             bill_length_mm = pd.to_numeric(df['bill_length_mm'], errors='coerce'),
